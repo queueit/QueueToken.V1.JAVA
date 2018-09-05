@@ -1,23 +1,63 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Queue-it Queue Token SDK for JAVA 
+The Queue-it Queue Token SDK is used to ensure that end users cannot enter the queue without a valid token and to be a container which can car-ry sensitive user information from integrating system into the queue. The token can be issued by any application that supports JAVA 1.6+.
+## The Token
+The token consists of two parts. Firstly, a header containing non-sensitive metadata. Secondly the payload of the token. Both header and payload are in JSON format.
+### Token Header
+```
+{ 
+  "typ": "QT1",
+  "enc": "AES256",
+  "iss": 1526464517,
+  "exp": 1526524517,
+  "ti": "159aba3e-55e1-4f54-b6ee-e5b943d7e885”,
+  "c": "ticketania", 
+  "e": "demoevent”
+}
+```
+- `typ`: The type of the token. Value must be “QFT1”. Required.
+- `enc`: Payload encryption algorithm. Value must be “AES256”. Required.
+- `ts`: NumericDate of when token was issued. Required.
+- `exp`: NumericDate of when token expires. Optional.
+- `ti`: Unique Token ID (e.g. uuid). Used to uniquely identify tokens and restrict replay attacks. Required.
+- `c`: The Customer ID of the issuer. Token will only be valid on events on this account. Required.
+- `e`: The Event ID of the issuer. If provided, token will only be valid on this event. For example to give a user a better rank at a specific event. Optional.
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+### Token Payload
+```
+{ 
+  "r": 0.4578,
+  "k": "XKDI42W",
+  "cd": { "size": "medium" }
+}
+```
+- `r`: The rank of the user. Must be a decimal value between 0 to <1. Used for determining the priority of the user. If no rank is provided the queue will assign a default rank (e.g. 0). Optional
+- `k`: A unique key that holds value to the integrating system (e.g. email or user id). Used to restrict users from issuing multiple queue ids. Optional.
+- `cd`: Any custom data of the user. This is a set of key-value pairs. Optional
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+## Usage
+```
+String secretKey = ...;
+IEnqueueToken token = Token
+  .enqueue("ticketania")
+  .withPayload(Payload
+    .enqueue()
+    .withKey("XKDI42W")
+    .withRank(0.4578)
+    .withCustomData("size", "medium")
+    .qenerate())
+  .withEventId("demoevent")
+  .withValidity(60000)
+  .generate(secretKey);
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+string signedToken = token.getSignedToken();
+```
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://www.visualstudio.com/en-us/docs/git/create-a-readme). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+## Serialized Token
+> eyJ0eXAiOiJRVDEiLCJlbmMiOiJBRVMyNTYiLCJpc3MiOjE1MzQ3MjMyMDAwMDAsImV4cCI6MTUzOTEyOTYwMDAwMCwidGkiOiJhMjFkNDIzYS00M2ZkLTQ4MjEtODRmYS00MzkwZjZhMmZkM2UiLCJjIjoidGlja2V0YW5pYSIsImUiOiJteWV2ZW50In0.0rDlI69F1Dx4Twps5qD4cQrbXbCRiezBd6fH1PVm6CnVY456FALkAhN3rgVrh_PGCJHcEXN5zoqFg65MH8WZc_CQdD63hJre3Sedu0-9zIs.aZgzkJm57etFaXjjME_-9LjOgPNTTqkp1aJ057HuEiU
 
+The format of the token is [header].[payload].[signature] where each part is Base64Url encoded. The payload is AES 256 encrypted with the secret key supplied in the `.Generate(secretKey)` method. If the “e” key is provided in the header, the secret key on the event must be used. If no “e” key is provided the default key on the customer account must be used.
+The token is signed with SHA 256 using the same secret key.
 
-http://opensourceforgeeks.blogspot.com/2014/09/how-to-install-java-cryptography.html
+## Trouble Shooting
+### Java Cryptography Extension (JCE) unlimited strength jurisdiction policy files
+Due to import control restrictions by the governments of a few countries, the jurisdiction policy files shipped with the JDK from Sun Microsystems specify that "strong" but limited cryptography may be used. This causes java.security.InvalidKeyException (Illegal key size or default parameters). Please refer to http://opensourceforgeeks.blogspot.com/2014/09/how-to-install-java-cryptography.html
