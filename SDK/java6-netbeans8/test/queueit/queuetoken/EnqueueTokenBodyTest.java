@@ -36,7 +36,7 @@ public class EnqueueTokenBodyTest {
     @Test
     public void factory_key() {
         String expectedKey = "myKey";
-        IEnqueueTokenBody instance = Body
+        IEnqueueTokenPayload instance = Payload
                 .enqueue()
                 .withKey(expectedKey)
                 .generate();
@@ -50,7 +50,7 @@ public class EnqueueTokenBodyTest {
     public void factory_key_rank() {
         String expectedKey = "myKey";
         Double expectedRank = 0.456;
-        IEnqueueTokenBody instance = Body
+        IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withKey(expectedKey)
             .withRank(expectedRank)
@@ -67,7 +67,7 @@ public class EnqueueTokenBodyTest {
         String expectedKey = "myKey";
         Double expectedRank = 0.456;
         String expectedCustomDataValue = "Value";
-        IEnqueueTokenBody instance = Body
+        IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withKey(expectedKey)
             .withRank(expectedRank)
@@ -84,7 +84,7 @@ public class EnqueueTokenBodyTest {
     @Test
     public void factory_rank() {
         Double expectedRank = 0.456;
-        IEnqueueTokenBody instance = Body
+        IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withRank(expectedRank)
             .generate();
@@ -99,7 +99,7 @@ public class EnqueueTokenBodyTest {
     public void factory_rank_customdata() {
         Double expectedRank = 0.456;
         String expectedCustomDataValue = "Value";
-        IEnqueueTokenBody instance = Body
+        IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withRank(expectedRank)
             .withCustomData("key", expectedCustomDataValue)
@@ -115,7 +115,7 @@ public class EnqueueTokenBodyTest {
     @Test
     public void factory_customdata() {
         String expectedCustomDataValue = "value";
-        IEnqueueTokenBody instance = Body
+        IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withCustomData("key", expectedCustomDataValue) 
             .generate();
@@ -131,7 +131,7 @@ public class EnqueueTokenBodyTest {
     public void serialize_key_rank_multicustomdata() {
         String expectedJson = "{\"r\":0.456,\"k\":\"myKey\",\"cd\":{\"key3\":\"Value3\",\"key2\":\"Value2\",\"key1\":\"Value1\"}}";
         
-        IEnqueueTokenBody instance = Body
+        IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withKey("myKey")
             .withRank(0.456)
@@ -139,7 +139,7 @@ public class EnqueueTokenBodyTest {
             .withCustomData("key2", "Value2")
             .withCustomData("key3", "Value3")
             .generate();
-        String actualJson = ((EnqueueTokenBody)instance).serialize();
+        String actualJson = ((EnqueueTokenPayload)instance).serialize();
         
         assertEquals(expectedJson, actualJson);
     }   
@@ -148,13 +148,13 @@ public class EnqueueTokenBodyTest {
     public void serialize_key_rank_onecustomdata() {
         String expectedJson = "{\"r\":0.456,\"k\":\"myKey\",\"cd\":{\"key1\":\"Value1\"}}";
         
-        IEnqueueTokenBody instance = Body
+        IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withKey("myKey")
             .withRank(0.456)
             .withCustomData("key1", "Value1")
             .generate();
-        String actualJson = ((EnqueueTokenBody)instance).serialize();
+        String actualJson = ((EnqueueTokenPayload)instance).serialize();
         
         assertEquals(expectedJson, actualJson);
     }      
@@ -163,12 +163,12 @@ public class EnqueueTokenBodyTest {
     public void serialize_key_rank() {
         String expectedJson = "{\"r\":0.456,\"k\":\"myKey\"}";
         
-        IEnqueueTokenBody instance = Body
+        IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withKey("myKey")
             .withRank(0.456)
             .generate();
-        String actualJson = ((EnqueueTokenBody)instance).serialize();
+        String actualJson = ((EnqueueTokenPayload)instance).serialize();
         
         assertEquals(expectedJson, actualJson);
     }   
@@ -177,11 +177,11 @@ public class EnqueueTokenBodyTest {
     public void serialize_key() {
         String expectedJson = "{\"k\":\"myKey\"}";
         
-        IEnqueueTokenBody instance = Body
+        IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withKey("myKey")
             .generate();
-        String actualJson = ((EnqueueTokenBody)instance).serialize();
+        String actualJson = ((EnqueueTokenPayload)instance).serialize();
         
         assertEquals(expectedJson, actualJson);
     }  
@@ -190,11 +190,11 @@ public class EnqueueTokenBodyTest {
     public void serialize_key_escaped() {
         String expectedJson = "{\"k\":\"my\"Key\"}";
         
-        IEnqueueTokenBody instance = Body
+        IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withKey("my\"Key")
             .generate();
-        String actualJson = ((EnqueueTokenBody)instance).serialize();
+        String actualJson = ((EnqueueTokenPayload)instance).serialize();
         
         assertEquals(expectedJson, actualJson);
     } 
@@ -203,11 +203,11 @@ public class EnqueueTokenBodyTest {
     public void serialize_rank() {
         String expectedJson = "{\"r\":0.456}";
         
-        IEnqueueTokenBody instance = Body
+        IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withRank(0.456)
             .generate();
-        String actualJson = ((EnqueueTokenBody)instance).serialize();
+        String actualJson = ((EnqueueTokenPayload)instance).serialize();
         
         assertEquals(expectedJson, actualJson);
     }  
@@ -216,11 +216,11 @@ public class EnqueueTokenBodyTest {
     public void serialize_customdata() {
         String expectedJson = "{\"cd\":{\"key1\":\"Value1\"}}";
         
-        IEnqueueTokenBody instance = Body
+        IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withCustomData("key1", "Value1")
             .generate();
-        String actualJson = ((EnqueueTokenBody)instance).serialize();
+        String actualJson = ((EnqueueTokenPayload)instance).serialize();
         
         assertEquals(expectedJson, actualJson);
     }  
@@ -229,11 +229,11 @@ public class EnqueueTokenBodyTest {
     public void serialize_customdata_escaped() {
         String expectedJson = "{\"cd\":{\"ke\"y1\":\"Va\"lue1\"}}";
         
-        IEnqueueTokenBody instance = Body
+        IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withCustomData("ke\"y1", "Va\"lue1")
             .generate();
-        String actualJson = ((EnqueueTokenBody)instance).serialize();
+        String actualJson = ((EnqueueTokenPayload)instance).serialize();
         
         assertEquals(expectedJson, actualJson);
     } 

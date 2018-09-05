@@ -1,6 +1,6 @@
 package queueit.queuetoken;
 
-public interface IEnqueueTokenBody {
+public interface IEnqueueTokenPayload {
     String getKey();
     Double getRank();
     String getCustomDataValue(String key);

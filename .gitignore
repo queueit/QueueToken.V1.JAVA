@@ -3,3 +3,5 @@
 /SDK/java6-netbeans8/dist/
 /SDK/java6-netbeans8/build/
 /.vs
+/JWETest/target/
+/JWETest/nbproject/

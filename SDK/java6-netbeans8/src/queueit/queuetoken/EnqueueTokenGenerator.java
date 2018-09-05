@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package queueit.queuetoken;
 
 import java.util.*;
@@ -21,25 +16,25 @@ public class EnqueueTokenGenerator {
     }
     
     public EnqueueTokenGenerator withValidity(long validityMillis) {
-        this.token = new EnqueueToken(this.token, validityMillis);
+        this.token = new EnqueueToken(this.token, this.token.getIssued() + validityMillis);
         
         return this;
     }
 
-    public EnqueueTokenGenerator withValidity(Date validity) {
-        this.token = new EnqueueToken(this.token, validity.getTime());
+    public EnqueueTokenGenerator withValidity(Date expires) {
+        this.token = new EnqueueToken(this.token, expires.getTime());
         
         return this;
     }
         
-    public EnqueueTokenGenerator withBody(IEnqueueTokenBody body) {
-        this.token = new EnqueueToken(this.token, body);
+    public EnqueueTokenGenerator withPayload(IEnqueueTokenPayload payload) {
+        this.token = new EnqueueToken(this.token, payload);
         
         return this;
     }
     
     public IEnqueueToken generate(String secretKey) throws TokenSerializationException {
-        token.generate(secretKey);
+        token.generate(secretKey, true);
         return token;
     }
 }

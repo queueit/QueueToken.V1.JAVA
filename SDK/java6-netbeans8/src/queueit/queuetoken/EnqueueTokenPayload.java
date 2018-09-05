@@ -2,32 +2,32 @@ package queueit.queuetoken;
 
 import java.util.*;
 
-class EnqueueTokenBody implements IEnqueueTokenBody {
+class EnqueueTokenPayload implements IEnqueueTokenPayload {
 
     private String key;
     private Double rank;
     private Map customData;
 
-    public EnqueueTokenBody() {
+    public EnqueueTokenPayload() {
         this.customData = new HashMap();
     }
 
-    public EnqueueTokenBody(EnqueueTokenBody body, String key) {
+    public EnqueueTokenPayload(EnqueueTokenPayload payload, String key) {
         this.key = key;
-        this.rank = body.rank;
-        this.customData = body.customData;
+        this.rank = payload.rank;
+        this.customData = payload.customData;
     }
 
-    public EnqueueTokenBody(EnqueueTokenBody body, double rank) {
-        this.key = body.key;
+    public EnqueueTokenPayload(EnqueueTokenPayload payload, double rank) {
+        this.key = payload.key;
         this.rank = rank;
-        this.customData = body.customData;
+        this.customData = payload.customData;
     }
     
-    public EnqueueTokenBody(EnqueueTokenBody body, String customDataKey, String customDataValue) {
-        this.key = body.key;
-        this.rank = body.rank;
-        this.customData = body.customData;
+    public EnqueueTokenPayload(EnqueueTokenPayload payload, String customDataKey, String customDataValue) {
+        this.key = payload.key;
+        this.rank = payload.rank;
+        this.customData = payload.customData;
         this.customData.put(customDataKey, customDataValue);
     }
         
@@ -100,5 +100,4 @@ class EnqueueTokenBody implements IEnqueueTokenBody {
         sb.append("}"); 
         return sb.toString();
     }
-   
 }
