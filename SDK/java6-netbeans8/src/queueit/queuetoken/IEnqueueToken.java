@@ -1,7 +1,5 @@
 package queueit.queuetoken;
 
-import java.util.*;
-
 public interface IEnqueueToken {
     TokenVersion getTokenVersion();
     EncryptionType getEncryption();

@@ -40,7 +40,19 @@ class EnqueueTokenPayload implements IEnqueueTokenPayload {
     public Double getRank() {
         return this.rank;
     }
+
+    @Override
+    public String[] getCustomDataKeys() {      
+        String[] keys = new String[this.customData.size()];
         
+        int index = 0;
+        for (Object key : customData.keySet()) {
+            keys[index] = key.toString();
+        }
+        
+        return keys;
+    }
+    
     @Override
     public String getCustomDataValue(String key) {      
         Object value = this.customData.get(key);
