@@ -1,5 +1,6 @@
 package queueit.queuetoken;
 
+import java.nio.charset.Charset;
 import java.util.*;
 
 class EnqueueTokenPayload implements IEnqueueTokenPayload {
@@ -62,7 +63,6 @@ class EnqueueTokenPayload implements IEnqueueTokenPayload {
         return (String)value;
     }
     
-    @Override
     public String serialize() {
         boolean addComma = false;
         
@@ -112,4 +112,17 @@ class EnqueueTokenPayload implements IEnqueueTokenPayload {
         sb.append("}"); 
         return sb.toString();
     }
+    
+    public String encryptAndEncode(String secretKey, String tokenIdentifier) throws TokenSerializationException {   
+        try {
+            byte[] inputBytes = this.serialize().getBytes(Charset.forName("UTF-8"));
+                        
+            byte[] encrypted = AesEncryption.Encrypt(inputBytes, secretKey, tokenIdentifier);
+            
+            return Base64UrlEncoder.encode(encrypted);
+
+        } catch (Exception ex) {
+            throw new TokenSerializationException(ex);
+        } 
+    } 
 }

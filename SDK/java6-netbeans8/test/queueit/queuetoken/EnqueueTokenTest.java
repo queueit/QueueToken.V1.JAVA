@@ -153,7 +153,7 @@ public class EnqueueTokenTest {
                 payload);
             token.generate("5ebbf794-1665-4d48-80d6-21ac34be7faedf9e10b3-551a-4682-bb77-fee59d6355d6", false);
 
-            String actualSignedToken = token.getSignedToken();
+            String actualSignedToken = token.getToken();
 
             assertEquals(expectedSignedToken, actualSignedToken);
     }   
@@ -172,7 +172,7 @@ public class EnqueueTokenTest {
             null);
         token.generate("5ebbf794-1665-4d48-80d6-21ac34be7faedf9e10b3-551a-4682-bb77-fee59d6355d6", false);
 
-        String actualSignedToken = token.getSignedToken();
+        String actualSignedToken = token.getToken();
 
         assertEquals(expectedSignedToken, actualSignedToken);
     }   
@@ -191,7 +191,7 @@ public class EnqueueTokenTest {
                 null);
             token.generate("5ebbf794-1665-4d48-80d6-21ac34be7faedf9e10b3-551a-4682-bb77-fee59d6355d6", false);
 
-            String actualSignedToken = token.getSignedToken();
+            String actualSignedToken = token.getToken();
 
             assertEquals(expectedSignedToken, actualSignedToken);
     }   

@@ -8,15 +8,10 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 class AesEncryption {
-    private final SecretKeySpec key;
-    private final IvParameterSpec iv;
 
-    public AesEncryption(String secretKey, String tokenIdentifier) {
-        key = generateKey(secretKey);
-        iv = generateIV(tokenIdentifier);
-    }
-
-    public byte[] Encrypt(byte[] input) throws TokenSerializationException {
+    public static byte[] Encrypt(byte[] input, String secretKey, String tokenIdentifier) throws TokenSerializationException {
+        SecretKeySpec key = generateKey(secretKey);
+        IvParameterSpec iv = generateIV(tokenIdentifier);
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, key, iv);
@@ -29,7 +24,7 @@ class AesEncryption {
         }
     }
    
-    private SecretKeySpec generateKey(String secretKey) {
+    private static SecretKeySpec generateKey(String secretKey) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] keyBytes = digest.digest(secretKey.getBytes(Charset.forName("UTF-8")));
@@ -41,7 +36,7 @@ class AesEncryption {
         }
     }
 
-    private IvParameterSpec generateIV(String tokenIdentifier)
+    private static IvParameterSpec generateIV(String tokenIdentifier)
     {       
         try {
             MessageDigest md5 = MessageDigest.getInstance("MD5");

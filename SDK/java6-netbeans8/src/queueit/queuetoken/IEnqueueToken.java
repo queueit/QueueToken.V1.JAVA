@@ -10,7 +10,7 @@ public interface IEnqueueToken {
     String getEventId();
     IEnqueueTokenPayload getPayload();
     
+    String getTokenWithoutHash();
     String getToken();
-    String getSignedToken();
-    String getSignature();
+    String getHash();
 }

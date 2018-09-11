@@ -1,8 +1,6 @@
 package queueit.queuetoken;
 
 import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 class EnqueueToken implements IEnqueueToken {
@@ -13,8 +11,8 @@ class EnqueueToken implements IEnqueueToken {
     private long issued;
     private long expires = Long.MAX_VALUE;
     private String tokenIdentifier;
-    private String serializedToken;
-    private String signature;
+    private String token;
+    private String hash;
 
     public EnqueueToken(String customerId) {
         this.customerId = customerId;
@@ -100,18 +98,18 @@ class EnqueueToken implements IEnqueueToken {
     }
 
     @Override
-    public String getToken() {
-        return this.serializedToken;
+    public String getTokenWithoutHash() {
+        return this.token;
     }
 
     @Override
-    public String getSignature() {
-        return this.signature;
+    public String getHash() {
+        return this.hash;
     }
     
     @Override
-    public String getSignedToken() {
-        return this.serializedToken + "." + this.signature;
+    public String getToken() {
+        return this.token + "." + this.hash;
     }    
 
     void generate(String secretKey) throws TokenSerializationException {
@@ -121,19 +119,14 @@ class EnqueueToken implements IEnqueueToken {
     void generate(String secretKey, boolean resetTokenIdentifier) throws TokenSerializationException {
         if (resetTokenIdentifier)
             this.tokenIdentifier = UUID.randomUUID().toString();
-        
-        AesEncryption aes = new AesEncryption(secretKey, tokenIdentifier);
-                        
+                              
         String serialized = serializeHeader() + ".";
         if (this.payload != null) {
-            String payloadJson = this.payload.serialize();
-            serialized = serialized + this.serializePayload(payloadJson, aes);
+            serialized = serialized + this.payload.encryptAndEncode(secretKey, tokenIdentifier);
         }
-        this.serializedToken = serialized;
+        this.token = serialized;
 
-        ShaSignature sha = new ShaSignature(secretKey);
-
-        this.signature = Base64UrlEncoder.encode(sha.GenerateSignature(serialized));    
+        this.hash = Base64UrlEncoder.encode(ShaHash.GenerateHash(serialized, secretKey));    
     }
     
     private String serializeHeader() {
@@ -160,18 +153,5 @@ class EnqueueToken implements IEnqueueToken {
         sb.append("}");
         
         return Base64UrlEncoder.encode(sb.toString().getBytes(Charset.forName("UTF-8")));        
-    }
-    
-    private String serializePayload(String input, AesEncryption aes) throws TokenSerializationException {   
-        try {
-            byte[] inputBytes = input.getBytes(Charset.forName("UTF-8"));
-                        
-            byte[] encrypted = aes.Encrypt(inputBytes);
-            
-            return Base64UrlEncoder.encode(encrypted);
-
-        } catch (Exception ex) {
-            throw new TokenSerializationException(ex);
-        } 
-    }  
+    } 
 }

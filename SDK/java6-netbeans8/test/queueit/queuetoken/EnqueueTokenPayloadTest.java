@@ -11,9 +11,9 @@ import static org.junit.Assert.*;
  *
  * @author mala
  */
-public class EnqueueTokenBodyTest {
+public class EnqueueTokenPayloadTest {
     
-    public EnqueueTokenBodyTest() {
+    public EnqueueTokenPayloadTest() {
     }
     
     @BeforeClass

@@ -5,5 +5,5 @@ public interface IEnqueueTokenPayload {
     Double getRank();
     String[] getCustomDataKeys();
     String getCustomDataValue(String key);
-    String serialize();
+    String encryptAndEncode(String secretKey, String tokenIdentifier) throws TokenSerializationException;
 }

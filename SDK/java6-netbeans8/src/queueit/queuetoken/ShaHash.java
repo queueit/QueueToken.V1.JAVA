@@ -3,18 +3,9 @@ package queueit.queuetoken;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-class ShaSignature {
-    private final String secretKey;
-
-    public ShaSignature(String secretKey)
-    {
-        this.secretKey = secretKey;
-    }
-
-    public byte[] GenerateSignature(String tokenString)
+class ShaHash {
+    public static byte[] GenerateHash(String tokenString, String secretKey)
     {
         try {
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
