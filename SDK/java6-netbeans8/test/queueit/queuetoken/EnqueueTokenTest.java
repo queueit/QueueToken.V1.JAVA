@@ -108,7 +108,7 @@ public class EnqueueTokenTest {
     }
     
     @Test
-    public void factory_withBody_withKey_withRank() throws Exception {
+    public void factory_withBody_withKey_withRelativeQuality() throws Exception {
         String expectedEventId = "myevent";
         String expectedCustomerId = "ticketania";
         long expectedValidity = 1100;
@@ -139,7 +139,7 @@ public class EnqueueTokenTest {
             IEnqueueTokenPayload payload = Payload
                     .enqueue()
                     .withKey("somekey")
-                    .withRank(0.45678663514)
+                    .withRelativeQuality(0.45678663514)
                     .withCustomData("color", "blue")
                     .withCustomData("size", "medium")
                     .generate();

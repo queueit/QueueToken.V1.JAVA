@@ -15,8 +15,8 @@ public class EnqueueTokenPayloadGenerator {
         return this;
     }
     
-    public EnqueueTokenPayloadGenerator withRank(double rank) {
-        this.payload = new EnqueueTokenPayload(this.payload, rank);
+    public EnqueueTokenPayloadGenerator withRelativeQuality(double relativeQuality) {
+        this.payload = new EnqueueTokenPayload(this.payload, relativeQuality);
         
         return this;
     }

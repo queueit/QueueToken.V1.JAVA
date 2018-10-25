@@ -16,11 +16,11 @@ The token consists of two parts. Firstly, a header containing non-sensitive meta
 ```
 - `typ`: The type of the token. Value must be “QFT1”. Required.
 - `enc`: Payload encryption algorithm. Value must be “AES256”. Required.
-- `ts`: NumericDate of when token was issued. Required.
+- `iss`: NumericDate of when token was issued. Required.
 - `exp`: NumericDate of when token expires. Optional.
 - `ti`: Unique Token ID (e.g. uuid). Used to uniquely identify tokens and restrict replay attacks. Required.
 - `c`: The Customer ID of the issuer. Token will only be valid on events on this account. Required.
-- `e`: The Event ID of the issuer. If provided, token will only be valid on this event. For example to give a user a better rank at a specific event. Optional.
+- `e`: The Event ID. If provided, token will only be valid on this event. Optional.
 
 ### Token Payload
 ```
@@ -30,7 +30,7 @@ The token consists of two parts. Firstly, a header containing non-sensitive meta
   "cd": { "size": "medium" }
 }
 ```
-- `r`: The rank of the user. Must be a decimal value between 0 to <1. Used for determining the priority of the user. If no rank is provided the queue will assign a default rank (e.g. 0). Optional
+- `r`: The relative quality of the key. Must be a decimal value. Used for determining the quality of the token. Optional
 - `k`: A unique key that holds value to the integrating system (e.g. email or user id). Used to restrict users from issuing multiple queue ids. Optional.
 - `cd`: Any custom data of the user. This is a set of key-value pairs. Optional
 
@@ -42,7 +42,7 @@ IEnqueueToken token = Token
   .withPayload(Payload
     .enqueue()
     .withKey("XKDI42W")
-    .withRank(0.4578)
+    .WithRelativeQuality(0.4578)
     .withCustomData("size", "medium")
     .qenerate())
   .withEventId("demoevent")

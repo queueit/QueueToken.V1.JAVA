@@ -41,73 +41,73 @@ public class EnqueueTokenPayloadTest {
                 .generate();
         String actualKey = instance.getKey();
         assertEquals(expectedKey, actualKey);
-        assertNull(instance.getRank());
+        assertNull(instance.getRelativeQuality());
         assertNull(instance.getCustomDataValue("key"));
     }
 
     @Test
-    public void factory_key_rank() {
+    public void factory_key_relativequality() {
         String expectedKey = "myKey";
-        Double expectedRank = 0.456;
+        Double expectedRelativeQuality = 0.456;
         IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withKey(expectedKey)
-            .withRank(expectedRank)
+            .withRelativeQuality(expectedRelativeQuality)
             .generate();
         String actualKey = instance.getKey();
-        Double actualRank = instance.getRank();
+        Double actualRelativeQuality = instance.getRelativeQuality();
         assertEquals(expectedKey, actualKey);
-        assertEquals(expectedRank, actualRank);
+        assertEquals(expectedRelativeQuality, actualRelativeQuality);
         assertNull(instance.getCustomDataValue("key"));    
     }
 
     @Test
-    public void factory_key_rank_customdata() {
+    public void factory_key_relativequality_customdata() {
         String expectedKey = "myKey";
-        Double expectedRank = 0.456;
+        Double expectedRelativeQuality = 0.456;
         String expectedCustomDataValue = "Value";
         IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withKey(expectedKey)
-            .withRank(expectedRank)
+            .withRelativeQuality(expectedRelativeQuality)
             .withCustomData("key", expectedCustomDataValue)
             .generate();
         String actualKey = instance.getKey();
-        Double actualRank = instance.getRank();
+        Double actualRelativeQuality = instance.getRelativeQuality();
         String actualCustomData = instance.getCustomDataValue("key");
         assertEquals(expectedKey, actualKey);
-        assertEquals(expectedRank, actualRank);
+        assertEquals(expectedRelativeQuality, actualRelativeQuality);
         assertEquals(expectedCustomDataValue, actualCustomData);
     }    
 
     @Test
-    public void factory_rank() {
-        Double expectedRank = 0.456;
+    public void factory_relativequality() {
+        Double expectedRelativeQuality = 0.456;
         IEnqueueTokenPayload instance = Payload
             .enqueue()
-            .withRank(expectedRank)
+            .withRelativeQuality(expectedRelativeQuality)
             .generate();
         String actualKey = instance.getKey();
-        Double actualRank = instance.getRank();
+        Double actualRelativeQuality = instance.getRelativeQuality();
         String actualCustomData = instance.getCustomDataValue("key");
         assertNull(actualKey);
-        assertEquals(expectedRank, actualRank);
+        assertEquals(expectedRelativeQuality, actualRelativeQuality);
         assertNull(actualCustomData);
     }      
     @Test
-    public void factory_rank_customdata() {
-        Double expectedRank = 0.456;
+    public void factory_relativequality_customdata() {
+        Double expectedRelativeQuality = 0.456;
         String expectedCustomDataValue = "Value";
         IEnqueueTokenPayload instance = Payload
             .enqueue()
-            .withRank(expectedRank)
+            .withRelativeQuality(expectedRelativeQuality)
             .withCustomData("key", expectedCustomDataValue)
             .generate();
         String actualKey = instance.getKey();
-        Double actualRank = instance.getRank();
+        Double actualRelativeQuality = instance.getRelativeQuality();
         String actualCustomData = instance.getCustomDataValue("key");
         assertNull(actualKey);
-        assertEquals(expectedRank, actualRank);
+        assertEquals(expectedRelativeQuality, actualRelativeQuality);
         assertEquals(expectedCustomDataValue, actualCustomData);
     }  
     
@@ -119,21 +119,21 @@ public class EnqueueTokenPayloadTest {
             .withCustomData("key", expectedCustomDataValue) 
             .generate();
         String actualKey = instance.getKey();
-        Double actualRank = instance.getRank();
+        Double actualRelativeQuality = instance.getRelativeQuality();
         String actualCustomData = instance.getCustomDataValue("key");
         assertNull(actualKey);
-        assertNull(actualRank);
+        assertNull(actualRelativeQuality);
         assertEquals(expectedCustomDataValue, actualCustomData);
     }  
     
     @Test
-    public void serialize_key_rank_multicustomdata() {
+    public void serialize_key_relativequality_multicustomdata() {
         String expectedJson = "{\"r\":0.456,\"k\":\"myKey\",\"cd\":{\"key3\":\"Value3\",\"key2\":\"Value2\",\"key1\":\"Value1\"}}";
         
         IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withKey("myKey")
-            .withRank(0.456)
+            .withRelativeQuality(0.456)
             .withCustomData("key1", "Value1")
             .withCustomData("key2", "Value2")
             .withCustomData("key3", "Value3")
@@ -144,13 +144,13 @@ public class EnqueueTokenPayloadTest {
     }   
 
     @Test
-    public void serialize_key_rank_onecustomdata() {
+    public void serialize_key_relativequality_onecustomdata() {
         String expectedJson = "{\"r\":0.456,\"k\":\"myKey\",\"cd\":{\"key1\":\"Value1\"}}";
         
         IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withKey("myKey")
-            .withRank(0.456)
+            .withRelativeQuality(0.456)
             .withCustomData("key1", "Value1")
             .generate();
         String actualJson = ((EnqueueTokenPayload)instance).serialize();
@@ -159,13 +159,13 @@ public class EnqueueTokenPayloadTest {
     }      
     
     @Test
-    public void serialize_key_rank() {
+    public void serialize_key_relativequality() {
         String expectedJson = "{\"r\":0.456,\"k\":\"myKey\"}";
         
         IEnqueueTokenPayload instance = Payload
             .enqueue()
             .withKey("myKey")
-            .withRank(0.456)
+            .withRelativeQuality(0.456)
             .generate();
         String actualJson = ((EnqueueTokenPayload)instance).serialize();
         
@@ -199,12 +199,12 @@ public class EnqueueTokenPayloadTest {
     } 
     
     @Test
-    public void serialize_rank() {
+    public void serialize_relativequality() {
         String expectedJson = "{\"r\":0.456}";
         
         IEnqueueTokenPayload instance = Payload
             .enqueue()
-            .withRank(0.456)
+            .withRelativeQuality(0.456)
             .generate();
         String actualJson = ((EnqueueTokenPayload)instance).serialize();
         

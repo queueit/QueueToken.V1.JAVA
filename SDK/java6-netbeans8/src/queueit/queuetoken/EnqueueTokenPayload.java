@@ -6,7 +6,7 @@ import java.util.*;
 class EnqueueTokenPayload implements IEnqueueTokenPayload {
 
     private String key;
-    private Double rank;
+    private Double relativeQuality;
     private Map customData;
 
     public EnqueueTokenPayload() {
@@ -15,19 +15,19 @@ class EnqueueTokenPayload implements IEnqueueTokenPayload {
 
     public EnqueueTokenPayload(EnqueueTokenPayload payload, String key) {
         this.key = key;
-        this.rank = payload.rank;
+        this.relativeQuality = payload.relativeQuality;
         this.customData = payload.customData;
     }
 
-    public EnqueueTokenPayload(EnqueueTokenPayload payload, double rank) {
+    public EnqueueTokenPayload(EnqueueTokenPayload payload, double relativeQuality) {
         this.key = payload.key;
-        this.rank = rank;
+        this.relativeQuality = relativeQuality;
         this.customData = payload.customData;
     }
     
     public EnqueueTokenPayload(EnqueueTokenPayload payload, String customDataKey, String customDataValue) {
         this.key = payload.key;
-        this.rank = payload.rank;
+        this.relativeQuality = payload.relativeQuality;
         this.customData = payload.customData;
         this.customData.put(customDataKey, customDataValue);
     }
@@ -38,8 +38,8 @@ class EnqueueTokenPayload implements IEnqueueTokenPayload {
     }
     
     @Override
-    public Double getRank() {
-        return this.rank;
+    public Double getRelativeQuality() {
+        return this.relativeQuality;
     }
 
     @Override
@@ -69,9 +69,9 @@ class EnqueueTokenPayload implements IEnqueueTokenPayload {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
         
-        if (this.rank != null) {
+        if (this.relativeQuality != null) {
             sb.append("\"r\":");
-            sb.append(this.rank);
+            sb.append(this.relativeQuality);
             addComma = true;
         }
         
