@@ -5,3 +5,5 @@
 /.vs
 /JWETest/target/
 /JWETest/nbproject/
+/queuetoken/target/
+/queuetoken/nbproject/
