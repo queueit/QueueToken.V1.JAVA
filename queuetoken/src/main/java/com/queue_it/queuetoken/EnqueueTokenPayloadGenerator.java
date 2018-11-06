@@ -1,7 +1,5 @@
 package com.queue_it.queuetoken;
 
-import java.util.*;
-
 public class EnqueueTokenPayloadGenerator {
     private EnqueueTokenPayload payload;
     

@@ -9,19 +9,25 @@ class EnqueueToken implements IEnqueueToken {
     private String eventId;
     private IEnqueueTokenPayload payload;
     private long issued;
-    private long expires = Long.MAX_VALUE;
+    private long expires = Long.MAX_VALUE;    
+    private String tokenIdentifierPrefix;
     private String tokenIdentifier;
     private String token;
     private String hash;
 
-    public EnqueueToken(String customerId) {
+    public EnqueueToken(String customerId, String tokenIdentifierPrefix) {
         this.customerId = customerId;
         this.issued = System.currentTimeMillis();
-        this.tokenIdentifier = UUID.randomUUID().toString();
+        this.tokenIdentifier = getTokenIdentifier(tokenIdentifierPrefix);
+        this.tokenIdentifierPrefix = tokenIdentifierPrefix;
+    }
+
+    private String getTokenIdentifier(String tokenIdentifierPrefix1) {
+        return tokenIdentifierPrefix1 == null || tokenIdentifierPrefix1.isEmpty() ? UUID.randomUUID().toString() : tokenIdentifierPrefix1 + "~" + UUID.randomUUID().toString();
     }
     
     public EnqueueToken(EnqueueToken token, Long expires) {
-        this(token.customerId); 
+        this(token.customerId, token.tokenIdentifierPrefix); 
         
         this.eventId = token.eventId;
         this.payload = token.payload;    
@@ -30,7 +36,7 @@ class EnqueueToken implements IEnqueueToken {
     }
     
     public EnqueueToken(EnqueueToken token, String eventId) {
-        this(token.customerId); 
+        this(token.customerId, token.tokenIdentifierPrefix); 
           
         this.eventId = eventId;
         this.payload = token.payload;    
@@ -39,7 +45,7 @@ class EnqueueToken implements IEnqueueToken {
     }
 
     public EnqueueToken(EnqueueToken token, IEnqueueTokenPayload payload) {
-        this(token.customerId); 
+        this(token.customerId, token.tokenIdentifierPrefix); 
           
         this.eventId = token.eventId;
         this.payload = payload;    
@@ -118,7 +124,7 @@ class EnqueueToken implements IEnqueueToken {
 
     void generate(String secretKey, boolean resetTokenIdentifier) throws TokenSerializationException {
         if (resetTokenIdentifier)
-            this.tokenIdentifier = UUID.randomUUID().toString();
+            this.tokenIdentifier = getTokenIdentifier(this.tokenIdentifierPrefix);
                               
         String serialized = serializeHeader() + ".";
         if (this.payload != null) {

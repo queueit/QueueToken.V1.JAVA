@@ -1,12 +1,5 @@
 package com.queue_it.queuetoken;
 
-import com.queue_it.queuetoken.TokenVersion;
-import com.queue_it.queuetoken.EnqueueToken;
-import com.queue_it.queuetoken.Payload;
-import com.queue_it.queuetoken.IEnqueueTokenPayload;
-import com.queue_it.queuetoken.IEnqueueToken;
-import com.queue_it.queuetoken.Token;
-import com.queue_it.queuetoken.EncryptionType;
 import java.util.Date;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -59,6 +52,20 @@ public class EnqueueTokenTest {
         assertEquals(token.getExpires(), Long.MAX_VALUE);
         assertNull(token.getEventId());
         assertNull(token.getPayload());
+    }
+    
+        @Test
+    public void factory_tokenidentifierprefix() throws Exception {
+      
+        long startTime = System.currentTimeMillis();
+        String expectedCustomerId = "ticketania";
+        String expectedTokenIdentifierPrefix = "SomePrefix";
+        IEnqueueToken token = Token
+                .enqueue(expectedCustomerId, expectedTokenIdentifierPrefix)
+                .generate("5ebbf794-1665-4d48-80d6-21ac34be7faedf9e10b3-551a-4682-bb77-fee59d6355d6");
+        
+        String[] tokenIdentifierParts = token.getTokenIdentifier().split("~");
+        assertEquals(expectedTokenIdentifierPrefix, tokenIdentifierParts[0]);        
     }
     
     @Test

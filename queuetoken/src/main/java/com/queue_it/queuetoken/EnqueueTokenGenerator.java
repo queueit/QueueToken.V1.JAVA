@@ -6,9 +6,13 @@ public class EnqueueTokenGenerator {
     private EnqueueToken token;
     
     public EnqueueTokenGenerator(String customerId) {
-         this.token = new EnqueueToken(customerId);
+         this.token = new EnqueueToken(customerId, null);
     }
 
+    public EnqueueTokenGenerator(String customerId, String tokenIdentifierPrefix) {
+         this.token = new EnqueueToken(customerId, tokenIdentifierPrefix);
+    }
+        
     public EnqueueTokenGenerator withEventId(String eventId) {
         this.token = new EnqueueToken(this.token, eventId);
         
