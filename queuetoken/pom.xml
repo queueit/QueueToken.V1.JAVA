@@ -24,4 +24,11 @@
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
     </properties>
+    <distributionManagement>
+        <repository>
+            <id>bintray-queueit-com.queue_it.queuetoken</id>
+            <name>queueit-com.queue_it.queuetoken</name>
+            <url>https://api.bintray.com/maven/queueit/maven/com.queue_it.queuetoken/;publish=1</url>
+        </repository>
+    </distributionManagement>
 </project>
