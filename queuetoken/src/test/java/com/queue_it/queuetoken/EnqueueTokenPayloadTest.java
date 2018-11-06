@@ -131,7 +131,7 @@ public class EnqueueTokenPayloadTest {
     
     @Test
     public void serialize_key_relativequality_multicustomdata() {
-        String expectedJson = "{\"r\":0.456,\"k\":\"myKey\",\"cd\":{\"key3\":\"Value3\",\"key2\":\"Value2\",\"key1\":\"Value1\"}}";
+        String expectedJson = "{\"r\":0.456,\"k\":\"myKey\",\"cd\":{\"key1\":\"Value1\",\"key2\":\"Value2\",\"key3\":\"Value3\"}}";
         
         IEnqueueTokenPayload instance = Payload
             .enqueue()
