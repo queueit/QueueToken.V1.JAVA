@@ -1,3 +1,5 @@
+[ ![Download](https://api.bintray.com/packages/queueit/maven/com.queue_it.queuetoken/images/download.svg) ](https://bintray.com/queueit/maven/com.queue_it.queuetoken/_latestVersion)
+
 # Queue-it Queue Token SDK for JAVA 
 The Queue-it Queue Token SDK is used to ensure that end users cannot enter the queue without a valid token and to be a container which can car-ry sensitive user information from integrating system into the queue. The token can be issued by any application that supports JAVA 1.6+.
 ## The Token
@@ -49,7 +51,19 @@ IEnqueueToken token = Token
   .withValidity(60000)
   .generate(secretKey);
 
-string token = token.getToken();
+String token = token.getToken();
+```
+
+### Specifying token identifier prefix
+A prefix for the token identifier can optionally be provided to restrict the user session after getting through the queue to the one used before entering the queue. Once the user is through the queue the token identifier is provided to the target application in the Known User token. The format of the token identifier is then "[YOUR PREFIX]~[GUID]", e.g: AnfTDnpwazllYmnmgaCJ8tErV80YHv77ni5NgqQNhfWwxNqrNcHb.~e937ef0d-48ec-4ff7-866e-52033273cb3d.
+```
+String tokenIdentifierPrefix = "AnfTDnpwazllYmnmgaCJ8tErV80YHv77ni5NgqQNhfWwxNqrNcHb";
+IEnqueueToken token = Token
+  .enqueue("ticketania", tokenIdentifierPrefix)
+  .generate(secretKey);
+
+String tokenIdentifier = token.getTokenIdentifier();
+// tokenIdentifier example: AnfTDnpwazllYmnmgaCJ8tErV80YHv77ni5NgqQNhfWwxNqrNcHb.~e937ef0d-48ec-4ff7-866e-52033273cb3d
 ```
 
 ## Serialized Token
