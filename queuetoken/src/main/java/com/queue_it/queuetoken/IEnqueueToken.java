@@ -8,6 +8,7 @@ public interface IEnqueueToken {
     String getTokenIdentifier();
     String getCustomerId();
     String getEventId();
+    String getIpAddress();
     IEnqueueTokenPayload getPayload();
     
     String getTokenWithoutHash();

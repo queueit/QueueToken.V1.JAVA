@@ -13,7 +13,8 @@ The token consists of two parts. Firstly, a header containing non-sensitive meta
   "exp": 1526524517,
   "ti": "159aba3e-55e1-4f54-b6ee-e5b943d7e885”,
   "c": "ticketania", 
-  "e": "demoevent”
+  "e": "demoevent”,
+  "ip": "75.86.129.4"
 }
 ```
 - `typ`: The type of the token. Value must be “QFT1”. Required.
@@ -23,6 +24,7 @@ The token consists of two parts. Firstly, a header containing non-sensitive meta
 - `ti`: Unique Token ID (e.g. uuid). Used to uniquely identify tokens and restrict replay attacks. Required.
 - `c`: The Customer ID of the issuer. Token will only be valid on events on this account. Required.
 - `e`: The Event ID. If provided, token will only be valid on this event. Optional.
+- `ip`: The IP address the user the token is issued to. If provided, token will only be valid for this IP address. Optional.
 
 ### Token Payload
 ```
@@ -48,6 +50,7 @@ IEnqueueToken token = Token
     .withCustomData("size", "medium")
     .qenerate())
   .withEventId("demoevent")
+	.WithIpAddress("75.86.129.4")
   .withValidity(60000)
   .generate(secretKey);
 

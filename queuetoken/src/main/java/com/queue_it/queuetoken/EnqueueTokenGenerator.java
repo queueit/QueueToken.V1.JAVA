@@ -14,25 +14,31 @@ public class EnqueueTokenGenerator {
     }
         
     public EnqueueTokenGenerator withEventId(String eventId) {
-        this.token = new EnqueueToken(this.token, eventId);
+        this.token = EnqueueToken.addEventId(this.token, eventId);
         
         return this;
     }
     
+    public EnqueueTokenGenerator withIpAddress(String ipAddress) {
+        this.token = EnqueueToken.addIPAddress(this.token, ipAddress);
+        
+        return this;
+    }
+        
     public EnqueueTokenGenerator withValidity(long validityMillis) {
-        this.token = new EnqueueToken(this.token, this.token.getIssued() + validityMillis);
+        this.token = EnqueueToken.addExpires(this.token, this.token.getIssued() + validityMillis);
         
         return this;
     }
 
     public EnqueueTokenGenerator withValidity(Date expires) {
-        this.token = new EnqueueToken(this.token, expires.getTime());
+        this.token = EnqueueToken.addExpires(this.token, expires.getTime());
         
         return this;
     }
         
     public EnqueueTokenGenerator withPayload(IEnqueueTokenPayload payload) {
-        this.token = new EnqueueToken(this.token, payload);
+        this.token = EnqueueToken.addPayload(this.token, payload);
         
         return this;
     }

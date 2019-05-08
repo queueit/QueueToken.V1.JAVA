@@ -7,6 +7,7 @@ class EnqueueToken implements IEnqueueToken {
 
     private final String customerId;
     private String eventId;
+    private String ipAddress;
     private IEnqueueTokenPayload payload;
     private long issued;
     private long expires = Long.MAX_VALUE;    
@@ -26,38 +27,12 @@ class EnqueueToken implements IEnqueueToken {
         return tokenIdentifierPrefix1 == null || tokenIdentifierPrefix1.isEmpty() ? UUID.randomUUID().toString() : tokenIdentifierPrefix1 + "~" + UUID.randomUUID().toString();
     }
     
-    public EnqueueToken(EnqueueToken token, Long expires) {
-        this(token.customerId, token.tokenIdentifierPrefix); 
-        
-        this.eventId = token.eventId;
-        this.payload = token.payload;    
-        this.expires = expires;
-        this.issued = token.issued;
-    }
-    
-    public EnqueueToken(EnqueueToken token, String eventId) {
-        this(token.customerId, token.tokenIdentifierPrefix); 
-          
-        this.eventId = eventId;
-        this.payload = token.payload;    
-        this.expires = token.expires;  
-        this.issued = token.issued;
-    }
-
-    public EnqueueToken(EnqueueToken token, IEnqueueTokenPayload payload) {
-        this(token.customerId, token.tokenIdentifierPrefix); 
-          
-        this.eventId = token.eventId;
-        this.payload = payload;    
-        this.expires = token.expires; 
-        this.issued = token.issued;
-    }
-    
-    public EnqueueToken(String tokenIdentifier, String customerId, String eventId, long issued, long expires, IEnqueueTokenPayload payload)
+    public EnqueueToken(String tokenIdentifier, String customerId, String eventId, long issued, long expires, String ipAddress, IEnqueueTokenPayload payload)
     {
         this.tokenIdentifier = tokenIdentifier;
         this.customerId = customerId;
         this.eventId = eventId;
+        this.ipAddress = ipAddress;
         this.issued = issued;
         this.expires = expires;
         this.payload = payload;
@@ -98,6 +73,11 @@ class EnqueueToken implements IEnqueueToken {
         return this.eventId;
     }
 
+    @Override
+    public String getIpAddress() {
+        return this.ipAddress;
+    }
+    
     @Override
     public IEnqueueTokenPayload getPayload() {
         return this.payload;
@@ -156,8 +136,31 @@ class EnqueueToken implements IEnqueueToken {
             sb.append(this.getEventId());
             sb.append("\"");
         }
+        if (this.getIpAddress()!= null) {
+            sb.append(",\"ip\":\"");
+            sb.append(this.getIpAddress());
+            sb.append("\"");
+        }
         sb.append("}");
         
         return Base64UrlEncoder.encode(sb.toString().getBytes(Charset.forName("UTF-8")));        
     } 
+    
+    static EnqueueToken addIPAddress(EnqueueToken token, String ipAddress)
+    {
+        return new EnqueueToken(token.getTokenIdentifier(), token.getCustomerId(), token.getEventId(), token.getIssued(), token.getExpires(), ipAddress, token.getPayload());
+    }
+    static EnqueueToken addEventId(EnqueueToken token, String eventId)
+    {
+        return new EnqueueToken(token.getTokenIdentifier(), token.getCustomerId(), eventId, token.getIssued(), token.getExpires(), token.getIpAddress(), token.getPayload());
+    }
+    static EnqueueToken addExpires(EnqueueToken token, Long expires)
+    {
+        return new EnqueueToken(token.getTokenIdentifier(), token.getCustomerId(), token.getEventId(), token.getIssued(), expires, token.getIpAddress(), token.getPayload());
+    }
+    static EnqueueToken addPayload(EnqueueToken token, IEnqueueTokenPayload payload)
+    {
+        return new EnqueueToken(token.getTokenIdentifier(), token.getCustomerId(), token.getEventId(), token.getIssued(), token.getExpires(), token.getIpAddress(), payload);
+    }
+
 }
