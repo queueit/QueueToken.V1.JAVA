@@ -58,7 +58,7 @@ String token = token.getToken();
 ```
 
 ### Specifying token identifier prefix
-A prefix for the token identifier can optionally be provided to restrict the user session after getting through the queue to the one used before entering the queue. Once the user is through the queue the token identifier is provided to the target application in the Known User token. The format of the token identifier is then "[YOUR PREFIX]~[GUID]", e.g: AnfTDnpwazllYmnmgaCJ8tErV80YHv77ni5NgqQNhfWwxNqrNcHb.~e937ef0d-48ec-4ff7-866e-52033273cb3d.
+A prefix for the token identifier can optionally be provided to restrict the user session after getting through the queue to the one used before entering the queue. Once the user is through the queue the token identifier is provided to the target application in the Known User token. The format of the token identifier is then "[YOUR PREFIX]~[GUID]", e.g: AnfTDnpwazllYmnmgaCJ8tErV80YHv77ni5NgqQNhfWwxNqrNcHb~e937ef0d-48ec-4ff7-866e-52033273cb3d.
 ```
 String tokenIdentifierPrefix = "AnfTDnpwazllYmnmgaCJ8tErV80YHv77ni5NgqQNhfWwxNqrNcHb";
 IEnqueueToken token = Token
@@ -66,7 +66,7 @@ IEnqueueToken token = Token
   .generate(secretKey);
 
 String tokenIdentifier = token.getTokenIdentifier();
-// tokenIdentifier example: AnfTDnpwazllYmnmgaCJ8tErV80YHv77ni5NgqQNhfWwxNqrNcHb.~e937ef0d-48ec-4ff7-866e-52033273cb3d
+// tokenIdentifier example: AnfTDnpwazllYmnmgaCJ8tErV80YHv77ni5NgqQNhfWwxNqrNcHb~e937ef0d-48ec-4ff7-866e-52033273cb3d
 ```
 
 ## Serialized Token
