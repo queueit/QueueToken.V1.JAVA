@@ -52,7 +52,7 @@ IEnqueueToken token = Token
     .withCustomData("size", "medium")
     .qenerate())
   .withEventId("demoevent")
-	.WithIpAddress("75.86.129.4")
+	.WithIpAddress("75.86.129.4", "45.67.2.4,34.56.3.2")
   .withValidity(60000)
   .generate(secretKey);
 
