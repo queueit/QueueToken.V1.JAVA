@@ -19,8 +19,8 @@ public class EnqueueTokenGenerator {
         return this;
     }
     
-    public EnqueueTokenGenerator withIpAddress(String ipAddress) {
-        this.token = EnqueueToken.addIPAddress(this.token, ipAddress);
+    public EnqueueTokenGenerator withIpAddress(String ipAddress, String xForwaredFor) {
+        this.token = EnqueueToken.addIPAddress(this.token, ipAddress, xForwaredFor);
         
         return this;
     }

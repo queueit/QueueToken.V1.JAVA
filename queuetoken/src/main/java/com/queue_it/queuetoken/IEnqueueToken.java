@@ -9,6 +9,7 @@ public interface IEnqueueToken {
     String getCustomerId();
     String getEventId();
     String getIpAddress();
+    String getXForwardedFor();
     IEnqueueTokenPayload getPayload();
     
     String getTokenWithoutHash();

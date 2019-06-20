@@ -108,13 +108,14 @@ public class EnqueueTokenTest {
     @Test
     public void factory_withIpAddress() throws Exception {
         String expectedIpAddress = "1.5.8.9";
-        
+        String expectedXForwardedFor = "45.67.2.4,34.56.3.2";
         IEnqueueToken token = Token
                 .enqueue("ticketania")
-                .withIpAddress(expectedIpAddress)
+                .withIpAddress(expectedIpAddress, expectedXForwardedFor)
                 .generate("5ebbf794-1665-4d48-80d6-21ac34be7faedf9e10b3-551a-4682-bb77-fee59d6355d6");
 
         assertEquals(expectedIpAddress, token.getIpAddress());
+        assertEquals(expectedXForwardedFor, token.getXForwardedFor());
     }
     
     @Test
@@ -173,6 +174,7 @@ public class EnqueueTokenTest {
                 1534723200000L, 
                 1539129600000L, 
                 null,
+                null,
                 payload);
             token.generate("5ebbf794-1665-4d48-80d6-21ac34be7faedf9e10b3-551a-4682-bb77-fee59d6355d6", false);
 
@@ -184,7 +186,7 @@ public class EnqueueTokenTest {
     @Test
     public void token_withoutPayload() throws Exception {
 
-        String expectedSignedToken = "eyJ0eXAiOiJRVDEiLCJlbmMiOiJBRVMyNTYiLCJpc3MiOjE1MzQ3MjMyMDAwMDAsImV4cCI6MTUzOTEyOTYwMDAwMCwidGkiOiJhMjFkNDIzYS00M2ZkLTQ4MjEtODRmYS00MzkwZjZhMmZkM2UiLCJjIjoidGlja2V0YW5pYSIsImUiOiJteWV2ZW50IiwiaXAiOiI1LjcuOC42In0..rqQznIDybri70GrsJ-hd_Hzp98HUqcsBGnWaiyqjlvY";
+        String expectedSignedToken = "eyJ0eXAiOiJRVDEiLCJlbmMiOiJBRVMyNTYiLCJpc3MiOjE1MzQ3MjMyMDAwMDAsImV4cCI6MTUzOTEyOTYwMDAwMCwidGkiOiJhMjFkNDIzYS00M2ZkLTQ4MjEtODRmYS00MzkwZjZhMmZkM2UiLCJjIjoidGlja2V0YW5pYSIsImUiOiJteWV2ZW50IiwiaXAiOiI1LjcuOC42IiwieGZmIjoiNDUuNjcuMi40LDM0LjU2LjMuMiJ9..wUOdVDIKlrIqumpU33bShDPdvTkicRk3q4Z-Vs8epFc";
 
         EnqueueToken token = new EnqueueToken(
             "a21d423a-43fd-4821-84fa-4390f6a2fd3e", 
@@ -193,6 +195,7 @@ public class EnqueueTokenTest {
             1534723200000L, 
             1539129600000L, 
             "5.7.8.6",
+            "45.67.2.4,34.56.3.2",
             null);
         token.generate("5ebbf794-1665-4d48-80d6-21ac34be7faedf9e10b3-551a-4682-bb77-fee59d6355d6", false);
 
@@ -212,6 +215,7 @@ public class EnqueueTokenTest {
                 null, 
                 1534723200000L, 
                 Long.MAX_VALUE,
+                null,
                 null,
                 null);
             token.generate("5ebbf794-1665-4d48-80d6-21ac34be7faedf9e10b3-551a-4682-bb77-fee59d6355d6", false);
