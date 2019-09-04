@@ -11,15 +11,15 @@ The token consists of two parts. Firstly, a header containing non-sensitive meta
   "enc": "AES256",
   "iss": 1526464517,
   "exp": 1526524517,
-  "ti": "159aba3e-55e1-4f54-b6ee-e5b943d7e885”,
+  "ti": "159aba3e-55e1-4f54-b6ee-e5b943d7e885",
   "c": "ticketania", 
-  "e": "demoevent”,
+  "e": "demoevent",
   "ip": "75.86.129.4",
   "xff": "45.67.2.4,34.56.3.2"
 }
 ```
-- `typ`: The type of the token. Value must be “QFT1”. Required.
-- `enc`: Payload encryption algorithm. Value must be “AES256”. Required.
+- `typ`: The type of the token. Value must be "QFT1". Required.
+- `enc`: Payload encryption algorithm. Value must be "AES256". Required.
 - `iss`: NumericDate of when token was issued. Required.
 - `exp`: NumericDate of when token expires. Optional.
 - `ti`: Unique Token ID (e.g. uuid). Used to uniquely identify tokens and restrict replay attacks. Required.
@@ -52,7 +52,7 @@ IEnqueueToken token = Token
     .withCustomData("size", "medium")
     .qenerate())
   .withEventId("demoevent")
-	.WithIpAddress("75.86.129.4", "45.67.2.4,34.56.3.2")
+  .withIpAddress("75.86.129.4", "45.67.2.4,34.56.3.2")
   .withValidity(60000)
   .generate(secretKey);
 
@@ -60,7 +60,7 @@ String token = token.getToken();
 ```
 
 ### Specifying token identifier prefix
-A prefix for the token identifier can optionally be provided to restrict the user session after getting through the queue to the one used before entering the queue. Once the user is through the queue the token identifier is provided to the target application in the Known User token. The format of the token identifier is then "[YOUR PREFIX]~[GUID]", e.g: AnfTDnpwazllYmnmgaCJ8tErV80YHv77ni5NgqQNhfWwxNqrNcHb~e937ef0d-48ec-4ff7-866e-52033273cb3d.
+A prefix for the token identifier can optionally be provided to restrict the user session after getting through the queue to the one used before entering the queue. Once the user is through the queue the token identifier is provided to the target application in the Known User token. The format of the token identifier is then `[YOUR PREFIX]~[GUID]`, e.g: AnfTDnpwazllYmnmgaCJ8tErV80YHv77ni5NgqQNhfWwxNqrNcHb~e937ef0d-48ec-4ff7-866e-52033273cb3d.
 ```
 String tokenIdentifierPrefix = "AnfTDnpwazllYmnmgaCJ8tErV80YHv77ni5NgqQNhfWwxNqrNcHb";
 IEnqueueToken token = Token
@@ -74,7 +74,7 @@ String tokenIdentifier = token.getTokenIdentifier();
 ## Serialized Token
 > eyJ0eXAiOiJRVDEiLCJlbmMiOiJBRVMyNTYiLCJpc3MiOjE1MzQ3MjMyMDAwMDAsImV4cCI6MTUzOTEyOTYwMDAwMCwidGkiOiJhMjFkNDIzYS00M2ZkLTQ4MjEtODRmYS00MzkwZjZhMmZkM2UiLCJjIjoidGlja2V0YW5pYSIsImUiOiJteWV2ZW50In0.0rDlI69F1Dx4Twps5qD4cQrbXbCRiezBd6fH1PVm6CnVY456FALkAhN3rgVrh_PGCJHcEXN5zoqFg65MH8WZc_CQdD63hJre3Sedu0-9zIs.aZgzkJm57etFaXjjME_-9LjOgPNTTqkp1aJ057HuEiU
 
-The format of the token is [header].[payload].[hash] where each part is Base64Url encoded. The payload is AES 256 encrypted with the secret key supplied in the `.Generate(secretKey)` method. If the “e” key is provided in the header, the secret key on the event must be used. If no “e” key is provided the default key on the customer account must be used.
+The format of the token is [header].[payload].[hash] where each part is Base64Url encoded. The payload is AES 256 encrypted with the secret key supplied in the `.Generate(secretKey)` method. If the "e" key is provided in the header, the secret key on the event must be used. If no "e" key is provided the default key on the customer account must be used.
 The token is signed with SHA 256 using the same secret key.
 
 ## Trouble Shooting
