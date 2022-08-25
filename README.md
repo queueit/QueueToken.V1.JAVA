@@ -18,7 +18,7 @@ The token consists of two parts. Firstly, a header containing non-sensitive meta
   "xff": "45.67.2.4,34.56.3.2"
 }
 ```
-- `typ`: The type of the token. Value must be "QFT1". Required.
+- `typ`: The type of the token. Value must be "QT1". Required.
 - `enc`: Payload encryption algorithm. Value must be "AES256". Required.
 - `iss`: NumericDate of when token was issued. Required.
 - `exp`: NumericDate of when token expires. Optional.
@@ -52,7 +52,7 @@ IEnqueueToken token = Token
     .withCustomData("size", "medium")
     .qenerate())
   .withEventId("demoevent")
-  .withIpAddress("75.86.129.4", "45.67.2.4,34.56.3.2")
+  .withIpAddress("75.86.129.4,45.67.2.4,34.56.3.2")
   .withValidity(60000)
   .generate(secretKey);
 
