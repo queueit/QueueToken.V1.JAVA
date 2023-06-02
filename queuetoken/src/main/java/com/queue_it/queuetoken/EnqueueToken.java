@@ -3,9 +3,6 @@ package com.queue_it.queuetoken;
 import java.nio.charset.Charset;
 import java.util.*;
 
-import com.queue_it.queuetoken.models.EncryptionType;
-import com.queue_it.queuetoken.models.TokenVersion;
-
 class EnqueueToken implements IEnqueueToken {
 
     private final String customerId;
@@ -14,7 +11,7 @@ class EnqueueToken implements IEnqueueToken {
     private String xForwaredFor;
     private IEnqueueTokenPayload payload;
     private long issued;
-    private long expires = Long.MAX_VALUE;
+    private long expires = Long.MAX_VALUE;    
     private String tokenIdentifierPrefix;
     private String tokenIdentifier;
     private String token;
@@ -27,8 +24,12 @@ class EnqueueToken implements IEnqueueToken {
         this.tokenIdentifierPrefix = tokenIdentifierPrefix;
     }
 
-    public EnqueueToken(String tokenIdentifier, String customerId, String eventId, long issued, long expires,
-            String ipAddress, String xForwaredFor, IEnqueueTokenPayload payload) {
+    private String getTokenIdentifier(String tokenIdentifierPrefix1) {
+        return tokenIdentifierPrefix1 == null || tokenIdentifierPrefix1.isEmpty() ? UUID.randomUUID().toString() : tokenIdentifierPrefix1 + "~" + UUID.randomUUID().toString();
+    }
+    
+    public EnqueueToken(String tokenIdentifier, String customerId, String eventId, long issued, long expires, String ipAddress, String xForwaredFor, IEnqueueTokenPayload payload)
+    {
         this.tokenIdentifier = tokenIdentifier;
         this.customerId = customerId;
         this.eventId = eventId;
@@ -38,7 +39,7 @@ class EnqueueToken implements IEnqueueToken {
         this.expires = expires;
         this.payload = payload;
     }
-
+        
     @Override
     public TokenVersion getTokenVersion() {
         return TokenVersion.QT1;
@@ -78,12 +79,12 @@ class EnqueueToken implements IEnqueueToken {
     public String getIpAddress() {
         return this.ipAddress;
     }
-
+    
     @Override
     public String getXForwardedFor() {
         return this.xForwaredFor;
     }
-
+    
     @Override
     public IEnqueueTokenPayload getPayload() {
         return this.payload;
@@ -98,16 +99,11 @@ class EnqueueToken implements IEnqueueToken {
     public String getHash() {
         return this.hash;
     }
-
+    
     @Override
     public String getToken() {
         return this.token + "." + this.hash;
-    }
-
-    private String getTokenIdentifier(String tokenIdentifierPrefix1) {
-        return tokenIdentifierPrefix1 == null || tokenIdentifierPrefix1.isEmpty() ? UUID.randomUUID().toString()
-                : tokenIdentifierPrefix1 + "~" + UUID.randomUUID().toString();
-    }
+    }    
 
     void generate(String secretKey) throws TokenSerializationException {
         generate(secretKey, true);
@@ -116,16 +112,16 @@ class EnqueueToken implements IEnqueueToken {
     void generate(String secretKey, boolean resetTokenIdentifier) throws TokenSerializationException {
         if (resetTokenIdentifier)
             this.tokenIdentifier = getTokenIdentifier(this.tokenIdentifierPrefix);
-
+                              
         String serialized = serializeHeader() + ".";
         if (this.payload != null) {
             serialized = serialized + this.payload.encryptAndEncode(secretKey, tokenIdentifier);
         }
         this.token = serialized;
 
-        this.hash = Base64UrlEncoding.encode(ShaHash.generateHash(serialized, secretKey));
+        this.hash = Base64UrlEncoder.encode(ShaHash.GenerateHash(serialized, secretKey));    
     }
-
+    
     private String serializeHeader() {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
@@ -147,38 +143,36 @@ class EnqueueToken implements IEnqueueToken {
             sb.append(this.getEventId());
             sb.append("\"");
         }
-        if (this.getIpAddress() != null) {
+        if (this.getIpAddress()!= null) {
             sb.append(",\"ip\":\"");
             sb.append(this.getIpAddress());
             sb.append("\"");
         }
-        if (this.getXForwardedFor() != null) {
+        if (this.getXForwardedFor()!= null) {
             sb.append(",\"xff\":\"");
             sb.append(this.getXForwardedFor());
             sb.append("\"");
         }
         sb.append("}");
-
-        return Base64UrlEncoding.encode(sb.toString().getBytes(Charset.forName("UTF-8")));
+        
+        return Base64UrlEncoder.encode(sb.toString().getBytes(Charset.forName("UTF-8")));        
+    } 
+    
+    static EnqueueToken addIPAddress(EnqueueToken token, String ipAddress, String xForwaredFor)
+    {
+        return new EnqueueToken(token.getTokenIdentifier(), token.getCustomerId(), token.getEventId(), token.getIssued(), token.getExpires(), ipAddress, xForwaredFor, token.getPayload());
+    }
+    static EnqueueToken addEventId(EnqueueToken token, String eventId)
+    {
+        return new EnqueueToken(token.getTokenIdentifier(), token.getCustomerId(), eventId, token.getIssued(), token.getExpires(), token.getIpAddress(), token.getXForwardedFor(), token.getPayload());
+    }
+    static EnqueueToken addExpires(EnqueueToken token, Long expires)
+    {
+        return new EnqueueToken(token.getTokenIdentifier(), token.getCustomerId(), token.getEventId(), token.getIssued(), expires, token.getIpAddress(), token.getXForwardedFor(), token.getPayload());
+    }
+    static EnqueueToken addPayload(EnqueueToken token, IEnqueueTokenPayload payload)
+    {
+        return new EnqueueToken(token.getTokenIdentifier(), token.getCustomerId(), token.getEventId(), token.getIssued(), token.getExpires(), token.getIpAddress(), token.getXForwardedFor(), payload);
     }
 
-    static EnqueueToken addIPAddress(EnqueueToken token, String ipAddress, String xForwaredFor) {
-        return new EnqueueToken(token.getTokenIdentifier(), token.getCustomerId(), token.getEventId(),
-                token.getIssued(), token.getExpires(), ipAddress, xForwaredFor, token.getPayload());
-    }
-
-    static EnqueueToken addEventId(EnqueueToken token, String eventId) {
-        return new EnqueueToken(token.getTokenIdentifier(), token.getCustomerId(), eventId, token.getIssued(),
-                token.getExpires(), token.getIpAddress(), token.getXForwardedFor(), token.getPayload());
-    }
-
-    static EnqueueToken addExpires(EnqueueToken token, Long expires) {
-        return new EnqueueToken(token.getTokenIdentifier(), token.getCustomerId(), token.getEventId(),
-                token.getIssued(), expires, token.getIpAddress(), token.getXForwardedFor(), token.getPayload());
-    }
-
-    static EnqueueToken addPayload(EnqueueToken token, IEnqueueTokenPayload payload) {
-        return new EnqueueToken(token.getTokenIdentifier(), token.getCustomerId(), token.getEventId(),
-                token.getIssued(), token.getExpires(), token.getIpAddress(), token.getXForwardedFor(), payload);
-    }
 }

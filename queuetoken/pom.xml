@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.queue-it</groupId>
     <artifactId>queuetoken</artifactId>
-    <version>1.0.20</version>
+    <version>1.0.37</version>
     <packaging>jar</packaging>
     <name>QueueIt QueueToken</name>
     <description>Queue-it QueueToken Library</description>
